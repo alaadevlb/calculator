@@ -1,0 +1,343 @@
+
+  :root {
+    --bg: #060610;
+    --surface: #0d0d1f;
+    --card: #12122a;
+    --border: rgba(99,102,241,0.2);
+    --indigo: #6366f1;
+    --violet: #8b5cf6;
+    --cyan: #22d3ee;
+    --pink: #f472b6;
+    --text: #f0f0ff;
+    --muted: #4b5080;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Background */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .bg-glow-1 {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.1), transparent 70%);
+    top: -200px; left: -200px;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .bg-glow-2 {
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(244,114,182,0.07), transparent 70%);
+    bottom: -200px; right: -200px;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  /* Calculator wrapper */
+  .calc-wrapper {
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.8s ease both;
+  }
+
+  .calc-label {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .calc-label h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 6px;
+    background: linear-gradient(135deg, var(--indigo), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .calc-label p {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Calculator body */
+  .calculator {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px;
+    width: 360px;
+    box-shadow:
+      0 0 0 1px rgba(99,102,241,0.05),
+      0 40px 80px rgba(0,0,0,0.6),
+      0 0 60px rgba(99,102,241,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .calculator::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20%; right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(99,102,241,0.5), transparent);
+  }
+
+  /* History */
+  .history {
+    min-height: 28px;
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+    padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+
+  /* Display */
+  .display {
+    background: var(--surface);
+    border: 1px solid rgba(99,102,241,0.1);
+    border-radius: 16px;
+    padding: 20px 20px 16px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .display::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--indigo), var(--cyan), var(--pink));
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .display.active::after { transform: scaleX(1); }
+
+  .display-expression {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: right;
+    min-height: 20px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .display-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    text-align: right;
+    background: linear-gradient(135deg, #ffffff, var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -2px;
+    line-height: 1;
+    transition: all 0.2s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .display-value.small { font-size: 2rem; }
+  .display-value.xs { font-size: 1.4rem; }
+
+  /* Buttons grid */
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.15s;
+  }
+
+  .btn:hover::before { background: rgba(255,255,255,0.05); }
+  .btn:active { transform: scale(0.93); }
+
+  /* Number buttons */
+  .btn-num {
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.05);
+    color: var(--text);
+  }
+
+  .btn-num:hover {
+    border-color: rgba(99,102,241,0.3);
+    box-shadow: 0 0 20px rgba(99,102,241,0.1);
+  }
+
+  /* Operator buttons */
+  .btn-op {
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.25);
+    color: var(--indigo);
+    font-size: 1.3rem;
+  }
+
+  .btn-op:hover {
+    background: rgba(99,102,241,0.2);
+    border-color: rgba(99,102,241,0.5);
+    box-shadow: 0 0 20px rgba(99,102,241,0.15);
+  }
+
+  .btn-op.active {
+    background: rgba(99,102,241,0.25);
+    border-color: var(--indigo);
+    color: white;
+    box-shadow: 0 0 20px rgba(99,102,241,0.2);
+  }
+
+  /* Special buttons */
+  .btn-clear {
+    background: rgba(244,114,182,0.1);
+    border: 1px solid rgba(244,114,182,0.2);
+    color: var(--pink);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+
+  .btn-clear:hover {
+    background: rgba(244,114,182,0.2);
+    border-color: rgba(244,114,182,0.4);
+    box-shadow: 0 0 20px rgba(244,114,182,0.1);
+  }
+
+  .btn-backspace {
+    background: rgba(34,211,238,0.08);
+    border: 1px solid rgba(34,211,238,0.15);
+    color: var(--cyan);
+    font-size: 1.2rem;
+  }
+
+  .btn-backspace:hover {
+    background: rgba(34,211,238,0.15);
+    border-color: rgba(34,211,238,0.3);
+  }
+
+  .btn-percent {
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.2);
+    color: var(--violet);
+  }
+
+  .btn-percent:hover {
+    background: rgba(139,92,246,0.2);
+    border-color: rgba(139,92,246,0.4);
+  }
+
+  /* Equals button */
+  .btn-equals {
+    background: linear-gradient(135deg, var(--indigo), var(--violet), var(--pink));
+    border: none;
+    color: white;
+    font-size: 2rem !important;
+    font-weight: 900 !important;
+    grid-column: span 1;
+    box-shadow: 0 8px 30px rgba(99,102,241,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .btn-equals:hover {
+    box-shadow: 0 12px 40px rgba(99,102,241,0.6), 0 0 0 1px rgba(255,255,255,0.15) inset;
+    transform: translateY(-2px) scale(0.98);
+  }
+
+  .btn-equals:active {
+    transform: scale(0.91);
+    box-shadow: 0 4px 15px rgba(99,102,241,0.4);
+  }
+
+  /* Zero button */
+  .btn-zero {
+    grid-column: span 2;
+    justify-content: flex-start;
+    padding-left: 24px;
+    letter-spacing: 2px;
+  }
+
+  /* Ripple effect */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transform: scale(0);
+    animation: rippleAnim 0.5s ease;
+    pointer-events: none;
+  }
+
+  @keyframes rippleAnim {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  /* Number animation */
+  @keyframes numPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .num-pop { animation: numPop 0.15s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Error state */
+  .display-value.error { color: var(--pink); font-size: 1.5rem; }
